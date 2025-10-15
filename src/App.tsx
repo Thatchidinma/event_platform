@@ -1,9 +1,9 @@
 import './App.css'
+import Loading from './components/LoadingPage.tsx'
 import NavBar from './components/NavBar'
 import Posts from './components/Posts'
 import { FilterProvider } from './context/searchContext.tsx'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import Loading from './components/loading.tsx'
 import { Suspense } from 'react'
 
 function App() {

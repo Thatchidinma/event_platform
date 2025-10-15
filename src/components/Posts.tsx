@@ -20,7 +20,7 @@ const Posts = () => {
             <SearchBar className=' sm:hidden m-auto' />
             <div className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start lg:max-w-[800] m-auto ">
                 {isLoading ? <Skeleton /> : <>
-                    {events?.length === 0 ?
+                     {events?.length === 0 ?
                     <>No events available</>
                     : events?.filter(
                         (post) =>
