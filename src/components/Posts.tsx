@@ -1,26 +1,18 @@
-'use client'
-import  { useEffect } from 'react'
 import PostCard from './PostCard'
 import Categories from './Categories'
-import { useInView } from "react-intersection-observer";
-import LoadingIcon from './icons/LoadingIcon'
 import Skeleton from './Skeleton'
 import SearchBar from './SearchBar'
-import { useGetPosts } from '../actions/queries';
+import { useGetEvents } from '../actions/queries';
 import { UseFilter } from '../context/searchContext';
 
 
 const Posts = () => {
-    const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useGetPosts()
-    const { ref, inView } = useInView();
+    const {
+        data: events, // Renamed 'data' to 'events' for clarity
+        isLoading
+    } = useGetEvents();
+
     const { search, category } = UseFilter()
-
-
-    useEffect(() => {
-        if (inView && hasNextPage) {
-            fetchNextPage();
-        }
-    }, [inView, hasNextPage, fetchNextPage]);
 
     return (
         <div className="w-full flex flex-col gap-8">
@@ -28,21 +20,26 @@ const Posts = () => {
             <SearchBar className=' sm:hidden m-auto' />
             <div className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start lg:max-w-[800] m-auto ">
                 {isLoading ? <Skeleton /> : <>
-                    {data?.pages.flat().filter(
+                    {events?.length === 0 ?
+                    <>No events available</>
+                    : events?.filter(
                         (post) =>
                             String(post.title)
                                 ?.toLowerCase()
                                 .includes(search.toLowerCase()) ||
-                            String(post.body)
+                            String(post.description)
                                 ?.toLowerCase()
                                 .includes(search.toLowerCase()),
                     ).filter(
                         (post) => {
                             if (category) {
+                                if (category === "pets-allowed"){
+                                    return post.petsAllowed
+                                }
                                 return String(post.title)
                                     ?.toLowerCase()
                                     .includes(category.toLowerCase()) ||
-                                    String(post.body)
+                                    String(post.description)
                                         ?.toLowerCase()
                                         .includes(category.toLowerCase())
                             } else {
@@ -51,12 +48,9 @@ const Posts = () => {
                         }
                     ).map((item, index) => {
                         return (
-                            <PostCard key={index} title={item.title} body={item.body} id={String(item.id)} />
+                            <PostCard key={index} title={item.title} body={item.description} time={item.time} date={item.date} pets={item.petsAllowed}  organizer={item.organizer}/>
                         )
                     })}
-                    <div ref={ref} className="w-full">
-                        {isFetchingNextPage ? <LoadingIcon className='m-auto' /> : ""}
-                    </div>
                 </>}
             </div>
         </div>

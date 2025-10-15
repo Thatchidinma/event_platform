@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import useQueryParams from "../hooks/useQueryParams";
 
-export type categoryEnum = "Educative" | "Food" | "Tech";
+export type categoryEnum = "Educative" | "Food" | "Tech" | "pets-allowed";
 export interface Filter {
   search: string;
   setSearch: (sort: string) => void;

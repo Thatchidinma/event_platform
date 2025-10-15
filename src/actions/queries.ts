@@ -1,20 +1,11 @@
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { getPost, getPosts } from "./posts";
+import {  useQuery } from "@tanstack/react-query";
+import { getEvents } from "./events";
 
-export const useGetPosts= () => {
-  return useInfiniteQuery({
-    initialPageParam: 1,
-    queryKey: ["posts"],
-    queryFn: ({ pageParam = 1 }) => getPosts(pageParam),
-    getNextPageParam: (lastPage, allPages) => {
-      return lastPage.length === 10 ? allPages.length + 1 : undefined;
-    },
-  });
+
+export const useGetEvents = () => {
+    return useQuery({
+        queryKey: ['events'],
+        queryFn: getEvents,
+
+    });
 };
-
-export const useGetPost = (id:string)=>{
-  return useQuery({
-    queryKey:['post', id],
-    queryFn: ()=> getPost(id)
-  })
-}
